@@ -20,7 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 
-class ResultActivity : AppCompatActivity(), RecyclerAdapter.OnItemClick {
+class ResultActivity : AppCompatActivity(), OnItemClick {
 
     val LOG_TAG = ResultActivity::class.java.simpleName
     var retrofit: Retrofit = NetworkRetrofit().getRetrofitInstance()
@@ -31,10 +31,9 @@ class ResultActivity : AppCompatActivity(), RecyclerAdapter.OnItemClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
-        val int: Intent = intent
-        val searchText = int.getStringExtra("searchText")
+        val searchText = intent.getStringExtra("searchText")!!.toString()
 
-        api.getBooks(searchText!!).enqueue(object : Callback<Books> {
+        api.getBooks(searchText).enqueue(object : Callback<Books> {
             override fun onResponse(call: Call<Books>, response: Response<Books>) {
                 if (response.body() != null) {
                     books = response.body()!!
@@ -66,6 +65,7 @@ class ResultActivity : AppCompatActivity(), RecyclerAdapter.OnItemClick {
     private fun initBooks() {
         val adapter = RecyclerAdapter(applicationContext, books, this)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext)
+        adapter.onItemClick=this
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -73,7 +73,7 @@ class ResultActivity : AppCompatActivity(), RecyclerAdapter.OnItemClick {
 
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClicked(position: Int) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(books.items[position].volumeInfo.infoLink));
         startActivity(intent)
     }

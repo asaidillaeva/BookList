@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun searchButtonClicked(view: View) {
-        val searchText = editText.text.trim()
+        val searchText: String = editText.text.toString().trim()
         if(searchText.isEmpty()){
             Toast.makeText(this, "Type Book name or Author", Toast.LENGTH_SHORT).show()
         }else{
