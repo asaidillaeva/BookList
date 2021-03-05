@@ -22,7 +22,6 @@ import retrofit2.Retrofit
 
 class ResultActivity : AppCompatActivity(), OnItemClick {
 
-    val LOG_TAG = ResultActivity::class.java.simpleName
     var retrofit: Retrofit = NetworkRetrofit().getRetrofitInstance()
     var api: Api = retrofit.create(Api::class.java)
     lateinit var books: Books
@@ -51,9 +50,7 @@ class ResultActivity : AppCompatActivity(), OnItemClick {
 
         })
 
-        recyclerView.hasFixedSize()
-
-
+        recyclerView.setHasFixedSize(true)
     }
 
     private fun intentBack() {
@@ -65,7 +62,6 @@ class ResultActivity : AppCompatActivity(), OnItemClick {
     private fun initBooks() {
         val adapter = RecyclerAdapter(applicationContext, books, this)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext)
-        adapter.onItemClick=this
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -74,7 +70,12 @@ class ResultActivity : AppCompatActivity(), OnItemClick {
     }
 
     override fun onItemClicked(position: Int) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(books.items[position].volumeInfo.infoLink));
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(books.items[position].volumeInfo.infoLink))
         startActivity(intent)
+    }
+
+
+    companion object {
+        private val LOG_TAG = ResultActivity::class.java.simpleName
     }
 }

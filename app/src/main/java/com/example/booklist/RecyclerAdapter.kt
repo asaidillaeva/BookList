@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.booklist.model.Books
 
-class RecyclerAdapter(context: Context, var books: Books, var onItemClick: OnItemClick) :
+class RecyclerAdapter internal constructor(context: Context, var books: Books, var onItemClick: OnItemClick) :
     RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>() {
 
     var inflater: LayoutInflater = LayoutInflater.from(context)
@@ -29,12 +29,15 @@ class RecyclerAdapter(context: Context, var books: Books, var onItemClick: OnIte
         val year = volumeInfo.publishedDate
         val author =
             if (volumeInfo.authors == null) " "
-            else volumeInfo.authors.toString().replace("[", "").replace("]", "")
+            else volumeInfo.authors.toString()
+                .replace("[", "")
+                .replace("]", "")
 
         val pages = volumeInfo.pageCount.toString()
 
         var image = try {
-            volumeInfo.imageLinks.imageLink.replace("http", "https");
+            volumeInfo.imageLinks.imageLink
+                .replace("http", "https");
         } catch (e: NullPointerException) {
             "R.drawable.star";
         }
